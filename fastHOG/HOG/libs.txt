@@ -1,0 +1,9 @@
+/HOG
+	HOGConvolution: cutil_line, cuda_gl_interop
+	HOGEngineDevice: cutil_line, cuda_gl_interop 
+	HOGHistogram: cutil_line, cuda_gl_interop 
+	HOGImage: FreeImage
+	HOGPadding: cutil_line, cuda_gl_interop
+	HOGScale: cutil_line, cuda_gl_interop
+	HOGSVMSlider: cutil_line, cuda_gl_interop
+	HOGUtils: cutil_line, cuda_gl_interop
