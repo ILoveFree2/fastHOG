@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 //#include <fltk/draw.h>
+
 ImageWindow::ImageWindow(int width, int height, char* title) //:
 	//fltk::Window(width, height, title)
 {
@@ -44,7 +45,7 @@ void ImageWindow::setImage(HOGImage* image)
 {
 	//this->begin();
 	imageWidget->setImage((unsigned char*) image->pixels);
-	imageWidget->draw();
+	imageWidget->draw(); // TODO inline?
 	//this->end();
 }
 
@@ -80,4 +81,5 @@ void ImageWindow::Close()
 	delete imageWidget;
 
 	//this->destroy();
+    xCloseDisplay();
 }
