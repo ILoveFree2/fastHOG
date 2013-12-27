@@ -1,67 +1,63 @@
 #ifndef __IMAGE_WINDOW_H__
 #define __IMAGE_WINDOW_H__
 
-/*
-#include <fltk/Window.h>
-#include <fltk/draw.h>
-#include <fltk/Rectangle.h>
-#include <fltk/Widget.h>
-#include <fltk/events.h>
-*/
-
 #include "../HOG/HOGImage.h"
-
-//#include <X11/?.h> // for XOpenDisplay
-//#include <X11/extensions/XI.h> needed for inlining fltk?
 
 #include <vector>
 
 using namespace HOG;
 
-class ImageWidget //public fltk::Widget
+class ImageWidget
 {
 	struct rect
 	{
 		int x, y, w, h;
-		rect(int _x, int _y, int _w, int _h) { x = _x; y = _y; w = _w; h = _h; }
+		rect(int x_, int y_, int w_, int h_)
+                {
+                    x = x_;
+                    y = y_;
+                    w = w_;
+                    h = h_;
+                };
+                rect()
+                {
+                };
 	};
 
-	Display *xdisplay; // defined in fltk/x11/run.cxx:497
+private:
+      struct rect bounds_;
 
 public:
 	std::vector<rect> rects;
 
 	unsigned char* pixels;
-	fltk::Rectangle* rectangle;
 
-	ImageWidget(int x, int y, int w, int h) //:
-		//fltk::Widget(x, y, w, h)
+	ImageWidget(int x, int y, int w, int h)
 	{
-		rectangle = new fltk::Rectangle(0, 0, w, h);
-		// this->box(fltk::BORDER_BOX); // TODO inline
-		// this->buttonbox(fltk::FLAT_BOX); // TODO inline
-                display = XOpenDisplay(0);
+		bounds_.x = x;
+                bounds_.y = y;
+                bounds_.w = w;
+                bounds_.h = h; 
+                // OpenDisplay();
 	}
 
-	ImageWidget(int x, int y, int w, int h, unsigned char* pixels) //:
-		//fltk::Widget(x, y, w, h)
+	ImageWidget(int x, int y, int w, int h, unsigned char* pixels)
 	{
 		this->pixels = pixels;
-		rectangle = new fltk::Rectangle(0, 0, w, h);
-		//this->box(fltk::BORDER_BOX); // TODO inline
-		//this->buttonbox(fltk::FLAT_BOX); // TODO inline
+		bounds_.x = x;
+                bounds_.y = y;
+                bounds_.w = w;
+                bounds_.h = h; 
 	}
 
 	void draw() // draws image and marks found targets with red boxes
 	{
-		//fltk::drawimage((unsigned char*) pixels, fltk::RGB32, *rectangle); = draw(Rectangle(rectangle->w(), rectangle->h()), *r) -> TODO code?
-		//fltk::setcolor(fltk::RED);
-                XSetForeground(xdisplay, gc, 0xff0000); // x11/setcolor.cxx
+                // TODO draw image
+                // TODO draw redboxes
 		for (std::size_t i=0; i<rects.size(); i++) {
-			//fltk::strokerect(rects[i].x, rects[i].y, rects[i].w, rects[i].h);
-		        XDrawRectangle(xdisplay, xwindow, gc, rects[i].x, rects[i].y, rects[i].w-1, rects[i].h-1); // dont use fltk, call Xlib directly
+		        // drawRectangle(rects[i].x, rects[i].y, rects[i].w-1, rects[i].h-1);
                 }
-                //this->redraw(); TODO inline
+                // redraw(); // if necessary
 	}
 
 	void setImage(unsigned char* pixelsNew)
@@ -72,18 +68,17 @@ public:
 	void drawRect(int x, int y, int w, int h)
 	{
 		rects.push_back(rect(x,y,w,h));
-		//this->redraw(); // TODO
+		// redraw(); //  if necessary
 	}
 };
 
-class ImageWindow //: public fltk::Window
+class ImageWindow
 {
 	bool colorImage;
 
 	int width, height;
 
 	ImageWidget* imageWidget;
-	//fltk::Window *otherWindow;
 
 public:
 

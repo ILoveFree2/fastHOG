@@ -3,33 +3,30 @@
 #include <stdio.h>
 //#include <fltk/draw.h>
 
-ImageWindow::ImageWindow(int width, int height, char* title) //:
-	//fltk::Window(width, height, title)
+ImageWindow::ImageWindow(int width, int height, char* title)
 {
 	this->width = width;
 	this->height = height;
 
-	//this->begin();
 	imageWidget = new ImageWidget(0, 0, width, height);
-	//this->end();
 
 	doStuff = 0;
 }
 
-ImageWindow::ImageWindow(HOGImage* image, char* title) //:
-	//fltk::Window(image->width, image->height, title)
+ImageWindow::ImageWindow(HOGImage* image, char* title)
 {
 	this->width = image->width;
 	this->height = image->height;
 
-	//this->begin();
 	imageWidget = new ImageWidget(0, 0, image->width, image->height, image->pixels);
-	//this->end();
 
 	doStuff = 0;
 }
 
-ImageWindow::~ImageWindow(void) { }
+ImageWindow::~ImageWindow(void)
+{
+    delete imageWidget;
+}
 
 void ImageWindow::show(int x, int y)
 {
@@ -43,10 +40,8 @@ void ImageWindow::show(int x, int y)
 
 void ImageWindow::setImage(HOGImage* image)
 {
-	//this->begin();
 	imageWidget->setImage((unsigned char*) image->pixels);
-	imageWidget->draw(); // TODO inline?
-	//this->end();
+	imageWidget->draw(); 
 }
 
 int ImageWindow::handle(int eventId)
@@ -76,10 +71,4 @@ void ImageWindow::drawRect(int x, int y, int w, int h)
 	imageWidget->drawRect(x, y, w, h);
 }
 
-void ImageWindow::Close()
-{
-	delete imageWidget;
-
-	//this->destroy();
-    xCloseDisplay();
-}
+void ImageWindow::Close() { }
