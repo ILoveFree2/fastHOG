@@ -3,6 +3,7 @@
 
 #include "../HOG/HOGImage.h"
 
+#include <stdio.h>
 #include <vector>
 
 using namespace HOG;
@@ -52,7 +53,8 @@ public:
 
 	void draw() // draws image and marks found targets with red boxes
 	{
-                // TODO draw image
+                printf("TODO Widget.draw() -> %d boxes\n", rects.size());
+		// TODO draw image
                 // TODO draw redboxes
 		for (std::size_t i=0; i<rects.size(); i++) {
 		        // drawRectangle(rects[i].x, rects[i].y, rects[i].w-1, rects[i].h-1);
@@ -68,7 +70,7 @@ public:
 	void drawRect(int x, int y, int w, int h)
 	{
 		rects.push_back(rect(x,y,w,h));
-		// redraw(); //  if necessary
+		draw();
 	}
 };
 

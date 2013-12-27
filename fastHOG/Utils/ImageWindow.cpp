@@ -19,8 +19,6 @@ ImageWindow::ImageWindow(HOGImage* image, char* title)
 	this->height = image->height;
 
 	imageWidget = new ImageWidget(0, 0, image->width, image->height, image->pixels);
-
-	doStuff = 0;
 }
 
 ImageWindow::~ImageWindow(void)
@@ -36,6 +34,7 @@ void ImageWindow::show(int x, int y)
 		//this->position(x, y);
 		//fltk::Window::show();
 	}
+    printf("TODO show()\n");
 }
 
 void ImageWindow::setImage(HOGImage* image)
@@ -70,5 +69,6 @@ void ImageWindow::drawRect(int x, int y, int w, int h)
 {
 	imageWidget->drawRect(x, y, w, h);
 }
+
 
 void ImageWindow::Close() { }

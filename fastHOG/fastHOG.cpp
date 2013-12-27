@@ -73,7 +73,8 @@ int main(void)
 	fastHOGWindow->doStuff = &doStuffHere;
 	fastHOGWindow->show();
 
-//	fltk::run();
+	// invoke window
+	doStuffHere();
 
 	delete image;
 	delete imageCUDA;
