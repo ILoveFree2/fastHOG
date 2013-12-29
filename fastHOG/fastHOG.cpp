@@ -25,12 +25,18 @@ HOGImage* imageCUDA;
 
 void doStuffHere()
 {
+        // TODO remove after testing
+        fastHOGWindow->drawRect(12, 37, 20, 20);
+        fastHOGWindow->drawRect(46, 126, 24, 20);
+        fastHOGWindow->drawRect(82, 128, 38, 38);
+        return;
+
 	HOGEngine::Instance()->InitializeHOG(image->width, image->height,
 			PERSON_LINEAR_BIAS, PERSON_WEIGHT_VEC, PERSON_WEIGHT_VEC_LENGTH);
 
 	//HOGEngine::Instance()->InitializeHOG(image->width, image->height,
 	//		"Files//SVM//head_W24x24_C4x4_N2x2_G4x4_HeadSize16x16.alt");
-
+       
 	Timer t;
 	t.restart();
 	HOGEngine::Instance()->BeginProcess(image);
@@ -40,7 +46,6 @@ void doStuffHere()
 	printf("Found %d positive results.\n", HOGEngine::Instance()->formattedResultsCount);
 
 	HOGEngine::Instance()->GetImage(imageCUDA, HOGEngine::IMAGE_ROI);
-	fastHOGWindow->setImage(imageCUDA);
 
 	for (int i=0; i<HOGEngine::Instance()->nmsResultsCount; i++)
 	{
@@ -64,19 +69,19 @@ void doStuffHere()
 	HOGEngine::Instance()->FinalizeHOG();
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
-	image = new HOGImage("Files//Images//testImage.bmp");
-	imageCUDA = new HOGImage(image->width,image->height);
+        if (argc == 1) {
+	     image = new HOGImage("Files//Images//testImage.bmp");
+        } else {
+             image = new HOGImage(argv[1]);
+        }
+	imageCUDA = new HOGImage(image->width, image->height);
 
 	fastHOGWindow = new ImageWindow(image, "fastHOG");
-	fastHOGWindow->doStuff = &doStuffHere;
-	fastHOGWindow->show();
-
-	// invoke window
-	doStuffHere();
-
-	delete image;
+	fastHOGWindow->initAndRun(&argc, argv, doStuffHere);
+	
+        delete image;
 	delete imageCUDA;
 
 	return 0;
