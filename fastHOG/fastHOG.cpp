@@ -67,7 +67,7 @@ void doStuffHere()
 int main(int argc, char **argv)
 {
         if (argc == 1) {
-	     image = new HOGImage("Files//Images//testImage.bmp");
+	     image = new HOGImage("testImage.bmp");
         } else {
              image = new HOGImage(argv[1]);
         }

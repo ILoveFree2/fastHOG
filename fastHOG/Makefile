@@ -27,6 +27,9 @@ NVCCFLAGS=
 INCLUDE=-I$(CUDA_SDK_DIR)/C/common/inc -I$(CUDA_INC) \
 -I. -I../FreeImage
 
+OBJS = fastHOG.o \
+HOG/HOGConvolution.o HOG/HOGEngineDevice.o HOG/HOGEngine.o HOG/HOGHistogram.o HOG/HOGImage.o HOG/HOGNMS.o HOG/HOGPadding.o HOG/HOGScale.o HOG/HOGUtils.o HOG/HOGSVMSlider.o Utils/ImageWindow.o 
+
 all: $(OBJS)
 	@cp $(OBJS) ../objs
 
@@ -36,9 +39,6 @@ all: $(OBJS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) $(INC) -c -o $*.o $<
-
-OBJS = fastHOG.o \
-HOG/HOGConvolution.o HOG/HOGEngineDevice.o HOG/HOGEngine.o HOG/HOGHistogram.o HOG/HOGImage.o HOG/HOGNMS.o HOG/HOGPadding.o HOG/HOGScale.o HOG/HOGUtils.o HOG/HOGSVMSlider.o Utils/ImageWindow.o 
 
 clean:
 	rm -f $(OBJS)

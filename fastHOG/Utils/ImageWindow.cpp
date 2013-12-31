@@ -88,7 +88,6 @@ static void glutDraw()
 void ImageWindow::initAndRun(int *argc, char **argv, void (*func)(void))
 {
     glutInit(argc, argv);
-    printf("init %d args, args[0]: %s\n", *argc, argv[0]);
     glutInitDisplayMode(GLUT_RGB);
     glutInitWindowPosition(0, 0);
     glutInitWindowSize(image->width, image->height);
