@@ -28,12 +28,6 @@ ImageWindow::~ImageWindow(void)
 {
 }
 
-/*void ImageWindow::setImage(HOGImage* image)
-{
-	imageWidget->setImage((unsigned char*) image->pixels);
-	imageWidget->draw(); 
-}*/
-
 static void glutDraw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -25,11 +25,6 @@ HOGImage* imageCUDA;
 
 void doStuffHere()
 {
-        // TODO remove after testing
-        fastHOGWindow->drawRect(12, 37, 20, 20);
-        fastHOGWindow->drawRect(46, 126, 24, 20);
-        fastHOGWindow->drawRect(82, 128, 38, 38);
-        return;
 
 	HOGEngine::Instance()->InitializeHOG(image->width, image->height,
 			PERSON_LINEAR_BIAS, PERSON_WEIGHT_VEC, PERSON_WEIGHT_VEC_LENGTH);
