@@ -83,7 +83,7 @@ namespace HOG
 		void BeginProcess(HOGImage* hostImage, int _minx = -1, int _miny = -1, int _maxx = -1, int _maxy = -1,
 			float minScale = -1.0f, float maxScale = -1.0f);
 		void EndProcess();
-		void GetImage(HOGImage *imageCUDA, ImageType imageType);
+		// void GetImage(HOGImage *imageCUDA, ImageType imageType);
 
 		void ComputeFormattedResults();
 

@@ -4,11 +4,8 @@ OBJS=$(patsubst %.cpp,%.o,$(shell find . -name "*.cpp"))
 
 all: $(OBJS)
 	@cp $(OBJS) $(BINDIR)
+clean:
+	rm -f $(OBJS)
 
 %.o: %.cpp ../Utilities.h
-	@ln -s ../Utilities.h ./.
-	$(CC) -c -o $@ $<
-	@rm Utilities.h
-
-clean:
-	rm -f *.o
+	$(CC) $(CC_FLAGS) -c -I.. -o $@ $<

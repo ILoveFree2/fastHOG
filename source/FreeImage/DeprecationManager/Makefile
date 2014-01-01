@@ -1,12 +1,14 @@
 .PHONY: all clean
 
-all: DeprecationMgr.o
-	@cp $< $(BINDIR)
+
+OBJS=DeprecationMgr.o
+
+all: $(OBJS)
+	@cp $(OBJS) $(BINDIR)
+
 clean:
-	@rm -f Utilities.h
-	rm -f *.o
+	rm -f $(OBJS)
+
 
 DeprecationMgr.o: DeprecationMgr.cpp DeprecationMgr.h ../Utilities.h
-	@ln ../Utilities.h ./.
-	$(CC) -c -o $@ $<
-	@rm Utilities.h
+	$(CC) $(CC_FLAGS) -c -I.. -o $@ $<

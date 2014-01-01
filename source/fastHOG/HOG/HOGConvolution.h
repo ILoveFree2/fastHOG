@@ -5,11 +5,6 @@
 #include <stdio.h>
 #include <math.h>
 
-#ifdef _WIN32
-#  define WINDOWS_LEAN_AND_MEAN
-#  include <windows.h>
-#endif
-
 #include <cuda_gl_interop.h>
 #include <cutil_inline.h>
 #include <cuda.h>
