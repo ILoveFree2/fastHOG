@@ -1,9 +1,12 @@
-.PHONY: all clean
+.PHONY: all ../fasthog clean
 
 OBJS=$(shell find . -name "*.o")
-
 
 all: ../fasthog
 
 ../fasthog: $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) $(LD_FLAGS) -o $@ $^
+
+clean:
+	rm -f $(OBJS) ../fasthog
+

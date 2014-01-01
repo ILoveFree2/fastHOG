@@ -1,18 +1,20 @@
 .PHONY: all clean
 
-OBJS = fastHOG.o \
-HOG/HOGConvolution.o HOG/HOGEngineDevice.o HOG/HOGEngine.o HOG/HOGHistogram.o HOG/HOGImage.o HOG/HOGNMS.o HOG/HOGPadding.o HOG/HOGScale.o HOG/HOGUtils.o HOG/HOGSVMSlider.o Utils/ImageWindow.o 
+OBJS=fastHOG.o
+HOG_OBJS=HOG/HOGConvolution.o HOG/HOGEngineDevice.o HOG/HOGEngine.o HOG/HOGHistogram.o HOG/HOGImage.o HOG/HOGNMS.o HOG/HOGPadding.o HOG/HOGScale.o HOG/HOGUtils.o HOG/HOGSVMSlider.o 
+UTILS_OBJS=Utils/ImageWindow.o 
 
-all: $(OBJS)
-	@cp $(OBJS) $(BINDIR)
+all: $(OBJS) $(HOG_OBJS) $(UTILS_OBJS)
+	@cp $^ $(BINDIR)
 
 %.o: %.cu
-	$(NVCC) $(NVCCFLAGS) $(NVCC_INC) -c -o $*.o $<
+	$(NVCC) $(NVCC_FLAGS) $(NVCC_INC) -c -o $*.o $<
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -I. -c -o $*.o $<
+	$(CC) $(CC_FLAGS) -I. -c -o $*.o $<
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) $(HOG_OBJS) $(UTILS_OBJS)
 
 clean_all: clean
+

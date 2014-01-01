@@ -7,8 +7,6 @@
 
 #include <stdio.h>
 
-#include "boost/thread/thread.hpp"
-
 #include "HOG/HOGEngine.h"
 #include "HOG/HOGImage.h"
 
@@ -23,6 +21,8 @@ HOGImage* image;
 
 void doStuffHere()
 {
+
+	ImageWindow *fastHOGWindow = ImageWindow::getInstance();
 /*
 	fastHOGWindow->drawRect(277, 164, 138, 227);
 	fastHOGWindow->drawRect(148, 109, 144, 288);

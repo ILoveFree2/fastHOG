@@ -1,18 +1,19 @@
-.PHONY: all clean clean_all cleanLibs
+.PHONY: all clean clean_all cleanLibs objects
 
-all:
-	@#$(MAKE) -C boost/make
-	@$(MAKE) -C FreeImage
-	@$(MAKE) -C fastHOG
-	@$(MAKE) -C ../objs ../fasthog
+DIRS=FreeImage fastHOG
+
+all: objects
+	@$(MAKE) -C ../objs
+
+objects:
+	@$(foreach DIR,$(DIRS), $(MAKE) -C $(DIR);)
 
 clean:
-	@rm -f fasthog bin/*.o
 	@$(MAKE) -C fastHOG clean
 
-clean_all: clean cleanLibs
+clean_all: 
+	@$(foreach DIR,$(DIRS), $(MAKE) -C $(DIR) clean;)
 
 cleanLibs:
-	@#$(MAKE) -C boost/make clean
 	@$(MAKE) -C FreeImage clean
-	@$(MAKE) -C fastHOG clean
+

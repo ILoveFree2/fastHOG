@@ -1,12 +1,10 @@
 .PHONY: all clean
+
+DIRS=DeprecationManager FreeImage FreeImageToolkit Metadata
+
 all:
-	@$(MAKE) -C DeprecationManager
-	@$(MAKE) -C FreeImage
-	@$(MAKE) -C FreeImageToolkit
-	@$(MAKE) -C Metadata
+	@$(foreach DIR,$(DIRS),$(MAKE) -C $(DIR) $@;)
 
 clean:
-	@$(MAKE) -C DeprecationManager clean
-	@$(MAKE) -C FreeImage clean
-	@$(MAKE) -C FreeImageToolkit clean
-	@$(MAKE) -C Metadata clean
+	@$(foreach DIR,$(DIRS),$(MAKE) -C $(DIR) $@;)
+

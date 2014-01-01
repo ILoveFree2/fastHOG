@@ -218,6 +218,7 @@ void HOGEngine::EndProcess()
 		hWindowSizeX, hWindowSizeY);
 }
 
+/*
 void HOGEngine::GetImage(HOGImage *imageCUDA, ImageType imageType)
 {
 	switch (imageType)
@@ -239,15 +240,12 @@ void HOGEngine::GetImage(HOGImage *imageCUDA, ImageType imageType)
 		break;
 	}
 }
+*/
 
 void HOGEngine::SaveResultsToDisk(char* fileName)
 {
 	FILE* f; 
-#ifdef _WIN32
-	fopen_s(&f, fileName, "w+");
-#else
 	f = fopen(fileName, "w+");
-#endif
 	fprintf(f, "%d\n", formattedResultsCount);
 	for (int i=0; i<formattedResultsCount; i++)
 	{
