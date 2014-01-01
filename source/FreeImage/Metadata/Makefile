@@ -1,11 +1,9 @@
 .PHONY: all clean
 
-CC=g++
-
 OBJS=$(patsubst %.cpp,%.o,$(shell find . -name "*.cpp"))
 
 all: $(OBJS)
-	@cp $(OBJS) ../../objs
+	@cp $(OBJS) $(BINDIR)
 
 FreeImageTag.o: FreeImageTag.cpp FreeImageTag.h ../Utilities.h
 	@ln -s ../Utilities.h ./.

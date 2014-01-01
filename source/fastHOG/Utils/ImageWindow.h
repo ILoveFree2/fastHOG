@@ -11,6 +11,7 @@
 
 using namespace HOG;
 
+
 class ImageWindow
 {
         struct rect {
@@ -18,21 +19,24 @@ class ImageWindow
         };
 
 private:
-        char *title;
 
+        HOGImage *image;
+	
+	ImageWindow() { }
+	
+	static void glutDraw();
 public:
 
+	static ImageWindow *getInstance();
 
-	ImageWindow(HOGImage* image, char* title);
-
-        void initAndRun(int *argc, char **argv, void (*)(void));
+        void initAndRun(int *argc, char **argv, HOGImage *image, char *title, void (*)(void));
 
 	void drawRect(int x, int y, int w, int h);
 
-	~ImageWindow(void);
+	~ImageWindow() { }
         
-        HOGImage *image;
 	std::vector<struct rect *> rects;
+	
 };
 
 #endif
