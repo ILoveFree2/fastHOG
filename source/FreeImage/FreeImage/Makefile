@@ -1,12 +1,9 @@
 .PHONY: all clean
 
-CC=g++
-CFLAGS=
-
 OBJS=$(patsubst %.cpp,%.o,$(shell find . -name "*.cpp"))
 
 all: $(OBJS)
-	@cp $(OBJS) ../../objs
+	@cp $(OBJS) $(BINDIR)
 
 clean:
 	@rm -f *.h

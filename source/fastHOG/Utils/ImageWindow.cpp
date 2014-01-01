@@ -7,31 +7,13 @@
 
 static ImageWindow *instance;
 
-/*ImageWindow::ImageWindow(int width, int height, char* title)
+void ImageWindow::glutDraw()
 {
-	this->width = width;
-	this->height = height;
+    printf("glutDraw()");
 
-	imageWidget = new ImageWidget(0, 0, width, height);
-        window = this;
-	doStuff = 0;
-}*/
-
-ImageWindow::ImageWindow(HOGImage* image, char* title)
-{
-        instance = this;
-        this->title = title;
-        this->image = image;
-}
-
-ImageWindow::~ImageWindow(void)
-{
-}
-
-static void glutDraw()
-{
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    ImageWindow *instance = ImageWindow::getInstance();
     // mirror at height / 2
     int width = instance->image->width;
     int height = instance->image->height;
@@ -85,8 +67,15 @@ static void glutDraw()
     glutSwapBuffers();
 }
 
-void ImageWindow::initAndRun(int *argc, char **argv, void (*func)(void))
+ImageWindow *ImageWindow::getInstance() {
+    if (instance == NULL)
+        instance = new ImageWindow();
+     return instance;
+}
+
+void ImageWindow::initAndRun(int *argc, char **argv, HOGImage *image, char *title, void (*func)(void))
 {
+    this->image = image;
     glutInit(argc, argv);
     glutInitDisplayMode(GLUT_RGB);
     glutInitWindowPosition(0, 0);
@@ -99,7 +88,7 @@ void ImageWindow::initAndRun(int *argc, char **argv, void (*func)(void))
 
 void ImageWindow::drawRect(int x, int y, int w, int h)
 {
-   struct rect *rectNew = new struct rect();
+   struct rect *rectNew = (struct rect *) malloc(sizeof(struct rect));
    rectNew->x = x;
    rectNew->y = y;
    rectNew->w = w;

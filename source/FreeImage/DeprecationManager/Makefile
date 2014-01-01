@@ -1,9 +1,7 @@
 .PHONY: all clean
 
-CC=g++
-
 all: DeprecationMgr.o
-	@cp $< ../../objs
+	@cp $< $(BINDIR)
 clean:
 	@rm -f Utilities.h
 	rm -f *.o

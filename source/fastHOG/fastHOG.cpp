@@ -19,13 +19,20 @@
 
 using namespace HOG;
 
-ImageWindow* fastHOGWindow;
 HOGImage* image;
-HOGImage* imageCUDA;
 
 void doStuffHere()
 {
+/*
+	fastHOGWindow->drawRect(277, 164, 138, 227);
+	fastHOGWindow->drawRect(148, 109, 144, 288);
+	fastHOGWindow->drawRect(233, 121, 135, 271);
+	fastHOGWindow->drawRect(119, 139, 104, 208);
+	fastHOGWindow->drawRect( 45, 115, 117, 235);
+	fastHOGWindow->drawRect(-35, 288, 113, 226);
 
+	return;
+*/
 	HOGEngine::Instance()->InitializeHOG(image->width, image->height,
 			PERSON_LINEAR_BIAS, PERSON_WEIGHT_VEC, PERSON_WEIGHT_VEC_LENGTH);
 
@@ -39,8 +46,6 @@ void doStuffHere()
 	t.stop(); t.check("Processing time");
 
 	printf("Found %d positive results.\n", HOGEngine::Instance()->formattedResultsCount);
-
-	HOGEngine::Instance()->GetImage(imageCUDA, HOGEngine::IMAGE_ROI);
 
 	for (int i=0; i<HOGEngine::Instance()->nmsResultsCount; i++)
 	{
@@ -71,13 +76,9 @@ int main(int argc, char **argv)
         } else {
              image = new HOGImage(argv[1]);
         }
-	imageCUDA = new HOGImage(image->width, image->height);
 
-	fastHOGWindow = new ImageWindow(image, "fastHOG");
-	fastHOGWindow->initAndRun(&argc, argv, doStuffHere);
+	ImageWindow::getInstance()->initAndRun(&argc, argv, image, "fastHOG", doStuffHere);
 	
-        delete image;
-	delete imageCUDA;
-
+	// no return from initAndRun ...
 	return 0;
 }
