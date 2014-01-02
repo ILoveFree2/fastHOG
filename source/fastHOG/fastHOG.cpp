@@ -58,10 +58,7 @@ void doStuffHere()
 				HOGEngine::Instance()->nmsResults[i].y,
 				HOGEngine::Instance()->nmsResults[i].width,
 				HOGEngine::Instance()->nmsResults[i].height);
-				fastHOGWindow->drawRect(HOGEngine::Instance()->nmsResults[i].x,
-						HOGEngine::Instance()->nmsResults[i].y,
-						HOGEngine::Instance()->nmsResults[i].width,
-						HOGEngine::Instance()->nmsResults[i].height);
+//		fastHOGWindow->drawRect(HOGEngine::Instance()->nmsResults[i].x, HOGEngine::Instance()->nmsResults[i].y, HOGEngine::Instance()->nmsResults[i].width, HOGEngine::Instance()->nmsResults[i].height);
 	}
 
 	printf("Drawn %d positive results.\n", HOGEngine::Instance()->nmsResultsCount);
@@ -77,8 +74,9 @@ int main(int argc, char **argv)
              image = new HOGImage(argv[1]);
         }
 
-	ImageWindow::getInstance()->initAndRun(&argc, argv, image, "fastHOG", doStuffHere);
-	
+	//ImageWindow::getInstance()->initAndRun(&argc, argv, image, "fastHOG", doStuffHere);
+	doStuffHere();
+
 	// no return from initAndRun ...
 	return 0;
 }
