@@ -15,8 +15,7 @@ $(info building on Laptop for Intel)
 CUDA_INSTALL=/usr/local/cuda
 else
 $(info building on Laptop for ARM - Crosscompile)
-$(error missing location of GL and glut librariries for ARM)
-ARM_GLUT= #TODO
+ARM_GLUT=/usr/arm-linux-gnueabihf/lib
 CUDA_INSTALL=/usr/local/cuda-arm
 endif
 else
@@ -31,7 +30,8 @@ else
 $(info building on Cluster for ARM - Crosscompile)
 $(error missing location of cuda librariries for ARM)
 CUDA_INSTALL= #TODO
-ARM_GLUT=/usr/arm-linux-gnueabihf/lib
+$(error missing location of GL and glut librariries for ARM)
+ARM_GLUT= #TODO
 endif
 else
 
