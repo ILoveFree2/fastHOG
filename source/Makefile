@@ -2,7 +2,9 @@
 
 DIRS=FreeImage fastHOG
 
-all: objects
+all: objects link
+
+link:
 	@$(MAKE) -C ../objs
 
 objects:
