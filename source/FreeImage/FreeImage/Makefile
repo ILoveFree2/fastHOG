@@ -1,12 +1,17 @@
-.PHONY: all clean
+.PHONY: all clean plugin_bmp
 
-OBJS=$(patsubst %.cpp,%.o,$(shell find . -name "*.cpp"))
+OBJS_ALL=$(patsubst %.cpp,%.o,$(shell find . -name "*.cpp" -not -name "Plugin*.cpp"))
+OBJS_PLUGIN=$(shell find . -name "Plugin*.o")
 
-all: $(OBJS)
-	@cp $(OBJS) $(BINDIR)
+all: Plugin_all.cpp Plugin_all.o PluginBMP.o PluginPNG.o $(OBJS_ALL)
+	@cp $^ $(BINDIR)
+
+plugin_bmp: Plugin_bmp.cpp Plugin_bmp.o PluginBMP.o $(OBJS_ALL)
+	@cp $^ $(BINDIR)
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS_ALL) $(OBJS_PLUGIN)
+	@rm -f Plugin_bmp.cpp Plugin_all.cpp
 
 Conversion.o: Conversion.cpp ../FreeImage.h ../Utilities.h ../Quantizers.h
 	$(CC) $(CC_Flags) -c -I.. -o $@ $<
@@ -20,8 +25,15 @@ BitmapAccess.o: BitmapAccess.cpp ../FreeImage.h ../FreeImageIO.h ../Utilities.h
 PixelAccess.o: PixelAccess.cpp ../FreeImage.h ../Utilities.h
 	$(CC) $(CC_Flags) -c -I.. -o $@ $<
 
-Plugin.o: Plugin.cpp ../FreeImage.h ../FreeImageIO.h ../Plugin.h ../Utilities.h
+Plugin_%.cpp: Plugin_%_part.cpp Plugin_.cpp
+	$(shell cat Plugin_.cpp > $@)
+	$(shell cat $< >> $@)
+
+Plugin_%.o: Plugin_%.cpp ../FreeImage.h ../FreeImageIO.h ../Plugin.h ../Utilities.h
 	$(CC) $(CC_Flags) -c -I.. -o $@ $<
+
+PluginPNG.o: PluginPNG.cpp ../FreeImage.h ../ZLib/zlib.h ../LibPNG/png.h
+	$(CC) $(CC_Flags) -c -I.. -I../ZLib -I../LibPNG -o $@ $<
 
 Plugin%.o: Plugin%.cpp ../FreeImage.h 
 	$(CC) $(CC_Flags) -c -I.. -o $@ $<

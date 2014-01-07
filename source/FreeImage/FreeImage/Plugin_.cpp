@@ -22,16 +22,7 @@
 // Use at your own risk!
 // =====================================================================
 
-#ifdef _MSC_VER 
-#pragma warning (disable : 4786) // identifier was truncated to 'number' characters
-#endif
-
-#ifdef _WIN32
-#include <windows.h>
-#include <io.h>
-#else
 #include <ctype.h>
-#endif // _WIN32
 
 #include "FreeImage.h"
 #include "Utilities.h"
@@ -209,129 +200,6 @@ PluginList::~PluginList() {
 PluginList * DLL_CALLCONV
 FreeImage_GetPluginList() {
 	return s_plugins;
-}
-
-// =====================================================================
-// Plugin System Initialization
-// =====================================================================
-
-void DLL_CALLCONV
-FreeImage_Initialise(BOOL load_local_plugins_only) {
-	if (s_plugin_reference_count++ == 0) {
-		
-		// initialise the TagLib singleton
-		TagLib& s = TagLib::instance();
-
-		// internal plugin initialization
-
-		s_plugins = new(std::nothrow) PluginList;
-
-		if (s_plugins) {
-			/* NOTE : 
-			The order used to initialize internal plugins below MUST BE the same order 
-			as the one used to define the FREE_IMAGE_FORMAT enum. 
-			*/
-			s_plugins->AddNode(InitBMP);
-//			s_plugins->AddNode(InitICO);
-// TODO	enable		plugins->AddNode(InitJPEG);
-//			s_plugins->AddNode(InitJNG);
-//			s_plugins->AddNode(InitKOALA);
-//			s_plugins->AddNode(InitIFF);
-//			s_plugins->AddNode(InitMNG);
-//			s_plugins->AddNode(InitPNM, NULL, "PBM", "Portable Bitmap (ASCII)", "pbm", "^P1");
-//			s_plugins->AddNode(InitPNM, NULL, "PBMRAW", "Portable Bitmap (RAW)", "pbm", "^P4");
-//			s_plugins->AddNode(InitPCD);
-//			s_plugins->AddNode(InitPCX);
-//			s_plugins->AddNode(InitPNM, NULL, "PGM", "Portable Greymap (ASCII)", "pgm", "^P2");
-//			s_plugins->AddNode(InitPNM, NULL, "PGMRAW", "Portable Greymap (RAW)", "pgm", "^P5");
-// TODO enable		s_plugins->AddNode(InitPNG);
-//			s_plugins->AddNode(InitPNM, NULL, "PPM", "Portable Pixelmap (ASCII)", "ppm", "^P3");
-//			s_plugins->AddNode(InitPNM, NULL, "PPMRAW", "Portable Pixelmap (RAW)", "ppm", "^P6");
-//			s_plugins->AddNode(InitRAS);
-//			s_plugins->AddNode(InitTARGA);
-//			s_plugins->AddNode(InitTIFF);
-//			s_plugins->AddNode(InitWBMP);
-//			s_plugins->AddNode(InitPSD);
-//			s_plugins->AddNode(InitCUT);
-//			s_plugins->AddNode(InitXBM);
-//			s_plugins->AddNode(InitXPM);
-//			s_plugins->AddNode(InitDDS);
-// TODO enable	        s_plugins->AddNode(InitGIF);
-// 			s_plugins->AddNode(InitHDR);
-//			s_plugins->AddNode(InitG3);
-//			s_plugins->AddNode(InitSGI);
-//			s_plugins->AddNode(InitEXR);
-//			s_plugins->AddNode(InitJ2K);
-//			s_plugins->AddNode(InitJP2);
-//			s_plugins->AddNode(InitPFM);
-//			s_plugins->AddNode(InitPICT);
-//			s_plugins->AddNode(InitRAW);
-			
-			// external plugin initialization
-
-#ifdef _WIN32
-			if (!load_local_plugins_only) {
-				int count = 0;
-				char buffer[MAX_PATH + 200];
-				char current_dir[2 * _MAX_PATH], module[2 * _MAX_PATH];
-				BOOL bOk = FALSE;
-
-				// store the current directory. then set the directory to the application location
-
-				if (GetCurrentDirectory(2 * _MAX_PATH, current_dir) != 0) {
-					if (GetModuleFileName(NULL, module, 2 * _MAX_PATH) != 0) {
-						char *last_point = strrchr(module, '\\');
-
-						if (last_point) {
-							*last_point = '\0';
-
-							bOk = SetCurrentDirectory(module);
-						}
-					}
-				}
-
-				// search for plugins
-
-				while (count < s_search_list_size) {
-					_finddata_t find_data;
-					long find_handle;
-
-					strcpy(buffer, s_search_list[count]);
-					strcat(buffer, "*.fip");
-
-					if ((find_handle = (long)_findfirst(buffer, &find_data)) != -1L) {
-						do {
-							strcpy(buffer, s_search_list[count]);
-							strncat(buffer, find_data.name, MAX_PATH + 200);
-
-							HINSTANCE instance = LoadLibrary(buffer);
-
-							if (instance != NULL) {
-								FARPROC proc_address = GetProcAddress(instance, "_Init@8");
-
-								if (proc_address != NULL) {
-									s_plugins->AddNode((FI_InitProc)proc_address, (void *)instance);
-								} else {
-									FreeLibrary(instance);
-								}
-							}
-						} while (_findnext(find_handle, &find_data) != -1L);
-
-						_findclose(find_handle);
-					}
-
-					count++;
-				}
-
-				// restore the current directory
-
-				if (bOk) {
-					SetCurrentDirectory(current_dir);
-				}
-			}
-#endif // _WIN32
-		}
-	}
 }
 
 void DLL_CALLCONV

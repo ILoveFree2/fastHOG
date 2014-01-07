@@ -8,5 +8,5 @@ all: ../fasthog
 	$(NVCC) $(LD_FLAGS) -o $@ $^
 
 clean:
-	rm -f $(OBJS) ../fasthog
+	@rm -f $(OBJS) ../fasthog
 

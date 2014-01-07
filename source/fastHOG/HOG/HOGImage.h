@@ -20,7 +20,6 @@ namespace HOG
 		unsigned char* pixels;
 
 		HOGImage(char* fileName);
-		HOGImage(int width, int height);
 		HOGImage(int width, int height, unsigned char *pixels);
 
 		virtual ~HOGImage();

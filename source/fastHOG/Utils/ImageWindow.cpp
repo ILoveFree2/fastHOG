@@ -1,6 +1,7 @@
 #include "ImageWindow.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <GL/glut.h>
 #include <GL/gl.h>
@@ -9,7 +10,6 @@ static ImageWindow *instance;
 
 void ImageWindow::glutDraw()
 {
-    printf("glutDraw()");
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -41,7 +41,7 @@ void ImageWindow::glutDraw()
         y1 = instance->rects[i]->y;
         y2 = instance->rects[i]->h + y1;
         
-        // scale to [-1,-1]    
+        // scale to [-1,-1]
         x1 = (x1 - xOffset) / xOffset;
         x2 = (x2 - xOffset) / xOffset;
         y1 = -(y1 - yOffset) / yOffset; // - for mirroring

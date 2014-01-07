@@ -16,16 +16,6 @@
 
 using namespace HOG;
 
-HOGImage::HOGImage(int width, int height)
-{
-	this->width = width;
-	this->height = height;
-
-	isLoaded = false;
-	this->pixels = (unsigned char*) malloc(sizeof(unsigned char) * 4 * width * height);
-	memset(this->pixels, 0, sizeof(unsigned char) * 4 * width * height);
-}
-
 HOGImage::HOGImage(int width, int height, unsigned char* pixels)
 {
 	this->width = width;
@@ -56,7 +46,6 @@ HOGImage::HOGImage(char* fileName)
 		if (bmp == NULL)
 			bLoaded = false;
 	}
-
 	if (bLoaded)
 	{
 		width = FreeImage_GetWidth(bmp);
@@ -80,8 +69,11 @@ HOGImage::HOGImage(char* fileName)
 
 		isLoaded = true;
 	}
-	else
+	else {
+		fprintf(stderr, "\"%s\": no such file, or is from no supported image format\n", fileName);
+		abort();
 		isLoaded = false;
+	}
 }
 
 HOGImage::~HOGImage()
