@@ -20,6 +20,7 @@ FreeImage_Initialise(BOOL load_local_plugins_only) {
 			as the one used to define the FREE_IMAGE_FORMAT enum. 
 			*/
 			s_plugins->AddNode(InitBMP);
+			s_plugins->AddNode(InitGIF);
 		}
 	}
 }

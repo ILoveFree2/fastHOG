@@ -1,4 +1,4 @@
-.PHONY: all clean clean_all clean_libs objects link proper proper_objects assertType bmp_only
+.PHONY: all clean clean_all clean_libs objects link proper proper_objects assertType simple
 
 LAPTOP=0
 CLUSTER=1
@@ -71,10 +71,11 @@ all: assertType
 link:
 	@$(MAKE) -C source link
 
-bmp_only: assertType
-	@$(MAKE) -C source bmp_only
+simple: assertType
+	@$(MAKE) -C source simple
 
-proper: clean_all 
+proper: 
+	$(MAKE) clean_all 
 	$(MAKE) all
 
 proper_objects: clean_all 

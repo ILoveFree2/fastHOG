@@ -1,15 +1,19 @@
-.PHONY: all clean bmp
+.PHONY: all clean simple
 
-DIRS_ALL=ZLib LibPNG DeprecationManager FreeImageToolkit Metadata FreeImage
-DIRS_BMP=DeprecationManager FreeImageToolkit Metadata
+#DIRS_COMPLEX=ZLib LibJPEG LibPNG
+DIRS_COMPLEX=ZLib LibPNG
+DIRS_SIMPLE=DeprecationManager FreeImageToolkit Metadata
 
-all: 
-	@$(foreach DIR,$(DIRS_ALL),$(MAKE) -C $(DIR) $@;)
+all:
+	@$(foreach DIR,$(DIRS_SIMPLE),$(MAKE) -C $(DIR);)
+	@$(foreach DIR,$(DIRS_COMPLEX),$(MAKE) -C $(DIR);)
+	@$(MAKE) -C FreeImage all
 
-bmp:
-	@$(foreach DIR,$(DIRS_BMP),$(MAKE) -C $(DIR);)
-	@$(MAKE) -C FreeImage plugin_bmp
+simple:
+	@$(foreach DIR,$(DIRS_SIMPLE),$(MAKE) -C $(DIR);)
+	@$(MAKE) -C FreeImage plugin_simple
 	
 clean:
-	@$(foreach DIR,$(DIRS_ALL),$(MAKE) -C $(DIR) $@;)
+	@$(foreach DIR,$(DIRS_SIMPLE),$(MAKE) -C $(DIR) clean;)
+	@$(foreach DIR,$(DIRS_COMPLEX),$(MAKE) -C $(DIR) clean;)
 

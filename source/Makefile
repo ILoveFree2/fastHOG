@@ -1,4 +1,4 @@
-.PHONY: all clean clean_all clean_libs objects bmp_only
+.PHONY: all clean clean_all clean_libs objects simple
 
 DIRS=FreeImage fastHOG
 
@@ -13,9 +13,9 @@ objects:
 	@$(MAKE) -C ../objs clean
 	@$(foreach DIR,$(DIRS), $(MAKE) -C $(DIR);)
 
-bmp_only:
+simple:
 	@$(MAKE) -C ../objs clean
-	@$(MAKE) -C FreeImage bmp
+	@$(MAKE) -C FreeImage simple
 	@$(MAKE) -C fastHOG all
 
 clean:

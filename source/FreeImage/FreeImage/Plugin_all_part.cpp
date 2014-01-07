@@ -20,9 +20,9 @@ FreeImage_Initialise(BOOL load_local_plugins_only) {
 			as the one used to define the FREE_IMAGE_FORMAT enum. 
 			*/
 			s_plugins->AddNode(InitBMP);
+		        s_plugins->AddNode(InitGIF);
 		        s_plugins->AddNode(InitPNG);
-// TODO	enable		plugins->AddNode(InitJPEG);
-// TODO enable	        s_plugins->AddNode(InitGIF);
+			// TODO enable s_plugins->AddNode(InitJPEG);
 //			s_plugins->AddNode(InitICO);
 //			s_plugins->AddNode(InitJNG);
 //			s_plugins->AddNode(InitKOALA);

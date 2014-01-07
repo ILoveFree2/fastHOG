@@ -1,17 +1,20 @@
-.PHONY: all clean plugin_bmp
+.PHONY: all clean plugin_simple
 
 OBJS_ALL=$(patsubst %.cpp,%.o,$(shell find . -name "*.cpp" -not -name "Plugin*.cpp"))
 OBJS_PLUGIN=$(shell find . -name "Plugin*.o")
 
-all: Plugin_all.cpp Plugin_all.o PluginBMP.o PluginPNG.o $(OBJS_ALL)
-	@cp $^ $(BINDIR)
+#all: Plugin_all.cpp Plugin_all.o PluginBMP.o PluginGIF.o PluginJPEG.o PluginPNG.o $(OBJS_ALL)
+	#@cp Plugin_all.o PluginBMP.o PluginGIF.o PluginJPEG.o PluginPNG.o $(OBJS_ALL) $(BINDIR)
 
-plugin_bmp: Plugin_bmp.cpp Plugin_bmp.o PluginBMP.o $(OBJS_ALL)
-	@cp $^ $(BINDIR)
+all: Plugin_all.cpp Plugin_all.o PluginBMP.o PluginGIF.o PluginPNG.o $(OBJS_ALL)
+	@cp Plugin_all.o PluginBMP.o PluginGIF.o PluginPNG.o $(OBJS_ALL) $(BINDIR)
+
+plugin_simple: Plugin_simple.cpp Plugin_simple.o PluginBMP.o PluginGIF.o $(OBJS_ALL)
+	@cp Plugin_simple.o PluginBMP.o PluginGIF.o $(OBJS_ALL) $(BINDIR)
 
 clean:
 	rm -f $(OBJS_ALL) $(OBJS_PLUGIN)
-	@rm -f Plugin_bmp.cpp Plugin_all.cpp
+	@rm -f Plugin_simple.cpp Plugin_all.cpp
 
 Conversion.o: Conversion.cpp ../FreeImage.h ../Utilities.h ../Quantizers.h
 	$(CC) $(CC_Flags) -c -I.. -o $@ $<

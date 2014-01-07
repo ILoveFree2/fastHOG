@@ -367,12 +367,14 @@ FI_STRUCT (FIICCPROFILE) {
 /** I/O image format identifiers.
 */
 FI_ENUM(FREE_IMAGE_FORMAT) {
-	FIF_UNKNOWN = -1,
+	FIF_UNKNOWN     = -1,
 	FIF_BMP		= 0,
+	FIF_GIF         = 25,
 	FIF_PNG		= 13,
-	FIF_GIF     = 25,
-	FIF_ICO		= 1,
 	FIF_JPEG	= 2,
+
+// not supported below
+	FIF_ICO		= 1,
 	FIF_JNG		= 3,
 	FIF_KOALA	= 4,
 	FIF_LBM		= 5,
