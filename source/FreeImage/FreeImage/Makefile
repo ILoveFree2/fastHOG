@@ -23,6 +23,9 @@ PixelAccess.o: PixelAccess.cpp ../FreeImage.h ../Utilities.h
 Plugin.o: Plugin.cpp ../FreeImage.h ../FreeImageIO.h ../Plugin.h ../Utilities.h
 	$(CC) $(CC_Flags) -c -I.. -o $@ $<
 
+PluginPNG.o: PluginPNG.cpp ../FreeImage.h ../ZLib/zlib.h ../LibPNG/png.h
+	$(CC) $(CC_Flags) -c -I.. -I../ZLib -I../LibPNG -o $@ $<
+
 Plugin%.o: Plugin%.cpp ../FreeImage.h 
 	$(CC) $(CC_Flags) -c -I.. -o $@ $<
 

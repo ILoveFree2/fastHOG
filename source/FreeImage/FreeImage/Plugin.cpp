@@ -232,8 +232,10 @@ FreeImage_Initialise(BOOL load_local_plugins_only) {
 			as the one used to define the FREE_IMAGE_FORMAT enum. 
 			*/
 			s_plugins->AddNode(InitBMP);
-//			s_plugins->AddNode(InitICO);
+		    s_plugins->AddNode(InitPNG);
 // TODO	enable		plugins->AddNode(InitJPEG);
+// TODO enable	        s_plugins->AddNode(InitGIF);
+//			s_plugins->AddNode(InitICO);
 //			s_plugins->AddNode(InitJNG);
 //			s_plugins->AddNode(InitKOALA);
 //			s_plugins->AddNode(InitIFF);
@@ -244,7 +246,6 @@ FreeImage_Initialise(BOOL load_local_plugins_only) {
 //			s_plugins->AddNode(InitPCX);
 //			s_plugins->AddNode(InitPNM, NULL, "PGM", "Portable Greymap (ASCII)", "pgm", "^P2");
 //			s_plugins->AddNode(InitPNM, NULL, "PGMRAW", "Portable Greymap (RAW)", "pgm", "^P5");
-// TODO enable		s_plugins->AddNode(InitPNG);
 //			s_plugins->AddNode(InitPNM, NULL, "PPM", "Portable Pixelmap (ASCII)", "ppm", "^P3");
 //			s_plugins->AddNode(InitPNM, NULL, "PPMRAW", "Portable Pixelmap (RAW)", "ppm", "^P6");
 //			s_plugins->AddNode(InitRAS);
@@ -256,7 +257,6 @@ FreeImage_Initialise(BOOL load_local_plugins_only) {
 //			s_plugins->AddNode(InitXBM);
 //			s_plugins->AddNode(InitXPM);
 //			s_plugins->AddNode(InitDDS);
-// TODO enable	        s_plugins->AddNode(InitGIF);
 // 			s_plugins->AddNode(InitHDR);
 //			s_plugins->AddNode(InitG3);
 //			s_plugins->AddNode(InitSGI);
