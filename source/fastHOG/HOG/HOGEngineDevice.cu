@@ -6,6 +6,15 @@
 #include "HOGScale.h"
 #include "HOGPadding.h"
 
+#define start_proc cudaEventRecord(start, 0);\
+for(int times = 0; times < 1000; ++times) {
+#define end_proc }\
+cudaEventRecord(stop, 0);\
+cudaEventElapsedTime(&elapsed_time_ms[watch++], start, stop);
+
+int watch = 0;
+cudaEvent_t start, stop;
+
 int hWidth, hHeight;
 int hWidthROI, hHeightROI;
 int hPaddedWidth, hPaddedHeight;
@@ -52,15 +61,7 @@ int avSizeX, avSizeY, marginX, marginY;
 
 extern uchar4* paddedRegisteredImageU4;
 
-__host__ void InitHOG(int width, int height,
-					  int _avSizeX, int _avSizeY,
-					  int _marginX, int _marginY,
-					  int cellSizeX, int cellSizeY,
-					  int blockSizeX, int blockSizeY,
-					  int windowSizeX, int windowSizeY,
-					  int noOfHistogramBins, float wtscale,
-					  float svmBias, float* svmWeights, int svmWeightsCount,
-					  bool useGrayscale)
+__host__ void InitHOG(int width, int height, int _avSizeX, int _avSizeY, int _marginX, int _marginY, int cellSizeX, int cellSizeY, int blockSizeX, int blockSizeY, int windowSizeX, int windowSizeY, int noOfHistogramBins, float wtscale, float svmBias, float* svmWeights, int svmWeightsCount, bool useGrayscale)
 {
 	cudaSetDevice( cutGetMaxGflopsDeviceId() );
 
@@ -132,6 +133,7 @@ __host__ void InitHOG(int width, int height,
 		cutilSafeCall(cudaMalloc((void**) &outputTest4, sizeof(uchar4) * hPaddedWidth * hPaddedHeight));
 
 	cutilSafeCall(cudaMallocHost((void**)&hResult, sizeof(float) * hNumberOfWindowsX * hNumberOfWindowsY * scaleCount));
+
 }
 
 __host__ void CloseHOG()
@@ -165,7 +167,7 @@ __host__ void CloseHOG()
 	cudaThreadExit();
 }
 
-__host__ void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale)
+__host__ void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale, float *elapsed_time_ms)
 {
 	int i;
 	minX = minx; minY = miny; maxX = maxx; maxY = maxy;
@@ -183,20 +185,33 @@ __host__ void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, i
 
 	for (i=0; i<scaleCount; i++)
 	{
+		
+		start_proc
 		DownscaleImage(0, scaleCount, i, currentScale, hUseGrayscale, paddedRegisteredImage, resizedPaddedImageF1, resizedPaddedImageF4);
-
+		end_proc
+		
+		start_proc
 		SetConvolutionSize(rPaddedWidth, rPaddedHeight);
+		end_proc
 
+		start_proc
 		if(hUseGrayscale) ComputeColorGradients1to2(resizedPaddedImageF1, colorGradientsF2);
 		else ComputeColorGradients4to2(resizedPaddedImageF4, colorGradientsF2);
+		end_proc
 
+		start_proc
 		ComputeBlockHistogramsWithGauss(colorGradientsF2, blockHistograms, hNoHistogramBins,
 			hCellSizeX, hCellSizeY, hBlockSizeX, hBlockSizeY, hWindowSizeX, hWindowSizeY,  rPaddedWidth, rPaddedHeight);
+		end_proc
 
+		start_proc
 		NormalizeBlockHistograms(blockHistograms, hNoHistogramBins, hCellSizeX, hCellSizeY, hBlockSizeX, hBlockSizeY, rPaddedWidth, rPaddedHeight);
-
+		end_proc
+		
+		start_proc
 		LinearSVMEvaluation(svmScores, blockHistograms, hNoHistogramBins, hWindowSizeX, hWindowSizeY, hCellSizeX, hCellSizeY,
 			hBlockSizeX, hBlockSizeY, rNoOfBlocksX, rNoOfBlocksY, i, rPaddedWidth, rPaddedHeight);
+		end_proc
 
 		currentScale *= scaleRatio;
 	}

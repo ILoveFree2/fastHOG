@@ -140,11 +140,11 @@ typedef struct backing_store_struct {
   /* Methods for reading/writing/closing this backing-store object */
   JMETHOD(void, read_backing_store, (j_common_ptr cinfo,
 				     backing_store_ptr info,
-				     void FAR * buffer_address,
+				     void *buffer_address,
 				     long file_offset, long byte_count));
   JMETHOD(void, write_backing_store, (j_common_ptr cinfo,
 				      backing_store_ptr info,
-				      void FAR * buffer_address,
+				      void *buffer_address,
 				      long file_offset, long byte_count));
   JMETHOD(void, close_backing_store, (j_common_ptr cinfo,
 				      backing_store_ptr info));

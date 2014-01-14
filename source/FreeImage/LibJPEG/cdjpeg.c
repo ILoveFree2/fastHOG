@@ -14,12 +14,6 @@
 #ifdef NEED_SIGNAL_CATCHER
 #include <signal.h>		/* to declare signal() */
 #endif
-#ifdef USE_SETMODE
-#include <fcntl.h>		/* to declare setmode()'s parameter macros */
-/* If you have setmode() but not <io.h>, just delete this line: */
-#include <io.h>			/* to declare setmode() */
-#endif
-
 
 /*
  * Signal catcher to ensure that temporary files are removed before aborting.
@@ -150,15 +144,10 @@ read_stdin (void)
 {
   FILE * input_file = stdin;
 
-#ifdef USE_SETMODE		/* need to hack file mode? */
-  setmode(fileno(stdin), O_BINARY);
-#endif
-#ifdef USE_FDOPEN		/* need to re-open in binary mode? */
   if ((input_file = fdopen(fileno(stdin), READ_BINARY)) == NULL) {
     fprintf(stderr, "Cannot reopen stdin\n");
     exit(EXIT_FAILURE);
   }
-#endif
   return input_file;
 }
 
@@ -168,14 +157,9 @@ write_stdout (void)
 {
   FILE * output_file = stdout;
 
-#ifdef USE_SETMODE		/* need to hack file mode? */
-  setmode(fileno(stdout), O_BINARY);
-#endif
-#ifdef USE_FDOPEN		/* need to re-open in binary mode? */
   if ((output_file = fdopen(fileno(stdout), WRITE_BINARY)) == NULL) {
     fprintf(stderr, "Cannot reopen stdout\n");
     exit(EXIT_FAILURE);
   }
-#endif
   return output_file;
 }

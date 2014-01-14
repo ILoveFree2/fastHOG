@@ -3,12 +3,6 @@
 
 #define UNROLL_LOOPS
 
-#ifdef _WIN32
-	#pragma comment( lib, "C:\\CUDA\\lib\\cuda.lib" )
-	#pragma comment( lib, "C:\\CUDA\\lib\\cudart.lib" )
-	#pragma comment( lib, "C:\\CUDA\\SDK\\common\\lib\\cutil32.lib" )
-#endif
-
 #ifndef CUDA_PIXEL
 #define CUDA_PIXEL unsigned char
 #endif

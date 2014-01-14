@@ -22,7 +22,7 @@ FreeImage_Initialise(BOOL load_local_plugins_only) {
 			s_plugins->AddNode(InitBMP);
 		        s_plugins->AddNode(InitGIF);
 		        s_plugins->AddNode(InitPNG);
-			// TODO enable s_plugins->AddNode(InitJPEG);
+			s_plugins->AddNode(InitJPEG);
 //			s_plugins->AddNode(InitICO);
 //			s_plugins->AddNode(InitJNG);
 //			s_plugins->AddNode(InitKOALA);

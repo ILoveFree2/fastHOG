@@ -29,7 +29,7 @@ extern "C" __host__ void InitHOG(int width, int height,
 
 extern "C" __host__ void CloseHOG();
 
-extern "C" __host__ void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale);
+extern "C" __host__ void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale, float *time);
 extern "C" __host__ float* EndHOGProcessing();
 
 extern "C"  __host__ void GetHOGParameters(float *cStartScale, float *cEndScale, float *cScaleRatio, int *cScaleCount,

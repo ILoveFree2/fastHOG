@@ -3,11 +3,8 @@
 OBJS_ALL=$(patsubst %.cpp,%.o,$(shell find . -name "*.cpp" -not -name "Plugin*.cpp"))
 OBJS_PLUGIN=$(shell find . -name "Plugin*.o")
 
-#all: Plugin_all.cpp Plugin_all.o PluginBMP.o PluginGIF.o PluginJPEG.o PluginPNG.o $(OBJS_ALL)
-	#@cp Plugin_all.o PluginBMP.o PluginGIF.o PluginJPEG.o PluginPNG.o $(OBJS_ALL) $(BINDIR)
-
-all: Plugin_all.cpp Plugin_all.o PluginBMP.o PluginGIF.o PluginPNG.o $(OBJS_ALL)
-	@cp Plugin_all.o PluginBMP.o PluginGIF.o PluginPNG.o $(OBJS_ALL) $(BINDIR)
+all: Plugin_all.cpp Plugin_all.o PluginBMP.o PluginGIF.o PluginJPEG.o PluginPNG.o $(OBJS_ALL)
+	@cp Plugin_all.o PluginBMP.o PluginGIF.o PluginJPEG.o PluginPNG.o $(OBJS_ALL) $(BINDIR)
 
 plugin_simple: Plugin_simple.cpp Plugin_simple.o PluginBMP.o PluginGIF.o $(OBJS_ALL)
 	@cp Plugin_simple.o PluginBMP.o PluginGIF.o $(OBJS_ALL) $(BINDIR)
@@ -50,5 +47,6 @@ GetType.o: GetType.cpp ../FreeImage.h ../FreeImageIO.h ../Plugin.h
 FreeImage.o: FreeImage.cpp ../FreeImage.h ../Utilities.h
 	$(CC) $(CC_FLAGS) -c -I.. -o $@ $<
 
-FreeImageIO.o: FreeImageIO.cpp ../FreeImage.h ../FreeImageIO.h ../Utilities.h
+%IO.o: %IO.cpp ../FreeImage.h ../FreeImageIO.h ../Utilities.h
 	$(CC) $(CC_FLAGS) -c -I.. -o $@ $<
+

@@ -19,11 +19,6 @@
 #include <locale.h>		/* Bill Allombert: use locale for isprint */
 #endif
 #include <ctype.h>		/* to declare isupper(), tolower() */
-#ifdef USE_SETMODE
-#include <fcntl.h>		/* to declare setmode()'s parameter macros */
-/* If you have setmode() but not <io.h>, just delete this line: */
-#include <io.h>			/* to declare setmode() */
-#endif
 
 #ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
 #ifdef __MWERKS__
@@ -443,73 +438,4 @@ keymatch (char * arg, const char * keyword, int minchars)
   if (nmatched < minchars)
     return 0;
   return 1;			/* A-OK */
-}
-
-
-/*
- * The main program.
- */
-
-int
-main (int argc, char **argv)
-{
-  int argn;
-  char * arg;
-  int verbose = 0, raw = 0;
-
-  /* On Mac, fetch a command line. */
-#ifdef USE_CCOMMAND
-  argc = ccommand(&argv);
-#endif
-
-  progname = argv[0];
-  if (progname == NULL || progname[0] == 0)
-    progname = "rdjpgcom";	/* in case C library doesn't provide it */
-
-  /* Parse switches, if any */
-  for (argn = 1; argn < argc; argn++) {
-    arg = argv[argn];
-    if (arg[0] != '-')
-      break;			/* not switch, must be file name */
-    arg++;			/* advance over '-' */
-    if (keymatch(arg, "verbose", 1)) {
-      verbose++;
-    } else if (keymatch(arg, "raw", 1)) {
-      raw = 1;
-    } else
-      usage();
-  }
-
-  /* Open the input file. */
-  /* Unix style: expect zero or one file name */
-  if (argn < argc-1) {
-    fprintf(stderr, "%s: only one input file\n", progname);
-    usage();
-  }
-  if (argn < argc) {
-    if ((infile = fopen(argv[argn], READ_BINARY)) == NULL) {
-      fprintf(stderr, "%s: can't open %s\n", progname, argv[argn]);
-      exit(EXIT_FAILURE);
-    }
-  } else {
-    /* default input file is stdin */
-#ifdef USE_SETMODE		/* need to hack file mode? */
-    setmode(fileno(stdin), O_BINARY);
-#endif
-#ifdef USE_FDOPEN		/* need to re-open in binary mode? */
-    if ((infile = fdopen(fileno(stdin), READ_BINARY)) == NULL) {
-      fprintf(stderr, "%s: can't open stdin\n", progname);
-      exit(EXIT_FAILURE);
-    }
-#else
-    infile = stdin;
-#endif
-  }
-
-  /* Scan the JPEG headers. */
-  (void) scan_JPEG_header(verbose, raw);
-
-  /* All done. */
-  exit(EXIT_SUCCESS);
-  return 0;			/* suppress no-return-value warnings */
 }

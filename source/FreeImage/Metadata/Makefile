@@ -11,6 +11,6 @@ clean:
 FreeImageTag.o: FreeImageTag.cpp FreeImageTag.h ../Utilities.h
 	$(CC) $(CC_FLAGS) -c -I.. -o $@ $<
 
-TagLib.o: TagLib.cpp ../Utilities.h
+%.o: %.cpp ../Utilities.h
 	$(CC) $(CC_FLAGS) -c -I.. -o $@ $<
 

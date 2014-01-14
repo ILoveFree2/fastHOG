@@ -12,15 +12,11 @@ using namespace HOG;
 
 HOGEngine* HOGEngine::instance;
 
-extern "C" void InitHOG(int width, int height, int avSizeX, int avSizeY,
-								 int marginX, int marginY, int cellSizeX, int cellSizeY,
-								 int blockSizeX, int blockSizeY, int windowSizeX, int windowSizeY,
-								 int noOfHistogramBins, float wtscale, float svmBias, float* svmWeights,
-								 int svmWeightsCount, bool useGrayscale);
+extern "C" void InitHOG(int width, int height, int avSizeX, int avSizeY, int marginX, int marginY, int cellSizeX, int cellSizeY, int blockSizeX, int blockSizeY, int windowSizeX, int windowSizeY,  int noOfHistogramBins, float wtscale, float svmBias, float* svmWeights, int svmWeightsCount, bool useGrayscale);
 
 extern "C" void CloseHOG();
 
-extern "C" void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale);
+extern "C" void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale, float *time);
 extern "C" float* EndHOGProcessing();
 
 extern "C" void GetProcessedImage(unsigned char* hostImage, int imageType);
@@ -200,7 +196,7 @@ void HOGEngine::BeginProcess(HOGImage* hostImage,
 		maxY = imageHeight;
 	}
 
-	BeginHOGProcessing(hostImage->pixels, minX, minY, maxX, maxY, minScale, maxScale);
+	BeginHOGProcessing(hostImage->pixels, minX, minY, maxX, maxY, minScale, maxScale, time);
 }
 
 void HOGEngine::EndProcess()

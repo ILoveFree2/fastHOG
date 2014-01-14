@@ -10,4 +10,4 @@ clean:
 	rm -f $(OBJS)
 
 %.o: %.c $(HEADERS)
-	@$(CC) $(CCFLAGS) -c -I. -o $@ $<
+	$(CC) $(CCFLAGS) -c -I. -o $@ $<
