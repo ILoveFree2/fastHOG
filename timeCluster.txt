@@ -1,0 +1,8 @@
+iterationen: 1000
+time used: 486.39 ms
+time used:  0.49 ms
+time used: 307.42 ms
+time used: 1928.76 ms
+time used: 126.89 ms
+time used: 158.29 ms
+Processing time : Time [342.740] seconds

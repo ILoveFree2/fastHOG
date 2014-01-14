@@ -196,6 +196,8 @@ void HOGEngine::BeginProcess(HOGImage* hostImage,
 		maxY = imageHeight;
 	}
 
+	for (int i = 0; i < sizeof(time) / sizeof(float); i++)
+		time[i] = -1;
 	BeginHOGProcessing(hostImage->pixels, minX, minY, maxX, maxY, minScale, maxScale, time);
 }
 
@@ -212,6 +214,9 @@ void HOGEngine::EndProcess()
 
 	nmsResults = nmsProcessor->ComputeNMSResults(formattedResults, formattedResultsCount, &nmsResultsAvailable, &nmsResultsCount,
 		hWindowSizeX, hWindowSizeY);
+
+	for (int i = 0; i < sizeof(time) / sizeof(float); i++)
+		printf("time used: %5.2f ms\n", time[i]);
 }
 
 /*

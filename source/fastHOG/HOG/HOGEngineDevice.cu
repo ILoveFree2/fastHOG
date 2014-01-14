@@ -7,12 +7,12 @@
 #include "HOGPadding.h"
 
 #define start_proc cudaEventRecord(start, 0);\
-for(int times = 0; times < 1000; ++times) {
-#define end_proc }\
+for(int times = 0; times < 8000; ++times) {
+#define end_proc(a) }\
 cudaEventRecord(stop, 0);\
-cudaEventElapsedTime(&elapsed_time_ms[watch++], start, stop);
+cudaEventSynchronize(stop);\
+cudaEventElapsedTime(&elapsed_time_ms[a], start, stop);
 
-int watch = 0;
 cudaEvent_t start, stop;
 
 int hWidth, hHeight;
@@ -170,6 +170,10 @@ __host__ void CloseHOG()
 __host__ void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale, float *elapsed_time_ms)
 {
 	int i;
+
+	cudaEventCreate(&start);
+	cudaEventCreate(&stop);
+
 	minX = minx; minY = miny; maxX = maxx; maxY = maxy;
 	PadHostImage((uchar4*)hostImage, paddedRegisteredImage, minX, minY, maxX, maxY);
 
@@ -188,30 +192,30 @@ __host__ void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, i
 		
 		start_proc
 		DownscaleImage(0, scaleCount, i, currentScale, hUseGrayscale, paddedRegisteredImage, resizedPaddedImageF1, resizedPaddedImageF4);
-		end_proc
+		end_proc(0)
 		
 		start_proc
 		SetConvolutionSize(rPaddedWidth, rPaddedHeight);
-		end_proc
+		end_proc(1)
 
 		start_proc
 		if(hUseGrayscale) ComputeColorGradients1to2(resizedPaddedImageF1, colorGradientsF2);
 		else ComputeColorGradients4to2(resizedPaddedImageF4, colorGradientsF2);
-		end_proc
+		end_proc(2)
 
 		start_proc
 		ComputeBlockHistogramsWithGauss(colorGradientsF2, blockHistograms, hNoHistogramBins,
 			hCellSizeX, hCellSizeY, hBlockSizeX, hBlockSizeY, hWindowSizeX, hWindowSizeY,  rPaddedWidth, rPaddedHeight);
-		end_proc
+		end_proc(3)
 
 		start_proc
 		NormalizeBlockHistograms(blockHistograms, hNoHistogramBins, hCellSizeX, hCellSizeY, hBlockSizeX, hBlockSizeY, rPaddedWidth, rPaddedHeight);
-		end_proc
+		end_proc(4)
 		
 		start_proc
 		LinearSVMEvaluation(svmScores, blockHistograms, hNoHistogramBins, hWindowSizeX, hWindowSizeY, hCellSizeX, hCellSizeY,
 			hBlockSizeX, hBlockSizeY, rNoOfBlocksX, rNoOfBlocksY, i, rPaddedWidth, rPaddedHeight);
-		end_proc
+		end_proc(5)
 
 		currentScale *= scaleRatio;
 	}
