@@ -21,7 +21,8 @@ namespace HOG
 		HOGNMS* nmsProcessor;
 		void readSVMFromFile(std::string fileName);
 
-		float time[6];
+		float time_ms[6];
+		int time_exec[6];
 
 	public:
 		int imageWidth, imageHeight;

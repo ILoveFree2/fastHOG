@@ -16,7 +16,7 @@ extern "C" void InitHOG(int width, int height, int avSizeX, int avSizeY, int mar
 
 extern "C" void CloseHOG();
 
-extern "C" void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale, float *time);
+extern "C" void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale, float *time_ms, int *time_exec);
 extern "C" float* EndHOGProcessing();
 
 extern "C" void GetProcessedImage(unsigned char* hostImage, int imageType);
@@ -56,6 +56,10 @@ void HOGEngine::InitializeHOG(int iw, int ih, std::string fileName)
 
 	nmsProcessor = new HOGNMS();
 
+	for (int i = 0; i < sizeof(time_ms) / sizeof(float); i++) {
+		time_ms[i] = 0;
+		time_exec[i] = 0;
+	}
 	InitHOG(iw, ih, avSizeX, avSizeY, marginX, marginY, hCellSizeX, hCellSizeY, hBlockSizeX, hBlockSizeY,
 		hWindowSizeX, hWindowSizeY, hNoOfHistogramBins, wtScale, svmBias, svmWeights, svmWeightsCount, useGrayscale);
 }
@@ -90,6 +94,10 @@ void HOGEngine::InitializeHOG(int iw, int ih, float svmBias, float* svmWeights, 
 
 	nmsProcessor = new HOGNMS();
 
+	for (int i = 0; i < sizeof(time_ms) / sizeof(float); i++) {
+		time_ms[i] = 0;
+		time_exec[i] = 0;
+	}
 	InitHOG(iw, ih, avSizeX, avSizeY, marginX, marginY, hCellSizeX, hCellSizeY, hBlockSizeX, hBlockSizeY,
 		hWindowSizeX, hWindowSizeY, hNoOfHistogramBins, wtScale, svmBias, svmWeights, svmWeightsCount, useGrayscale);
 }
@@ -196,9 +204,8 @@ void HOGEngine::BeginProcess(HOGImage* hostImage,
 		maxY = imageHeight;
 	}
 
-	for (int i = 0; i < sizeof(time) / sizeof(float); i++)
-		time[i] = -1;
-	BeginHOGProcessing(hostImage->pixels, minX, minY, maxX, maxY, minScale, maxScale, time);
+
+	BeginHOGProcessing(hostImage->pixels, minX, minY, maxX, maxY, minScale, maxScale, time_ms, time_exec);
 }
 
 void HOGEngine::EndProcess()
@@ -215,8 +222,20 @@ void HOGEngine::EndProcess()
 	nmsResults = nmsProcessor->ComputeNMSResults(formattedResults, formattedResultsCount, &nmsResultsAvailable, &nmsResultsCount,
 		hWindowSizeX, hWindowSizeY);
 
-	for (int i = 0; i < sizeof(time) / sizeof(float); i++)
-		printf("time used: %5.2f ms\n", time[i]);
+	float sum = 0;
+	for (int i = 0; i < sizeof(time_ms) / sizeof(float); i++) {
+		sum += time_exec[i];
+	}
+	char *name_exec[6];
+	name_exec[0]="DownscaleImage";
+	name_exec[1]="SetConvolutionSize";
+	name_exec[2]="ComputeColorGradient{1,4}to2";
+	name_exec[3]="ComputeBlockHistograms";
+	name_exec[4]="NormalizeBlockHistograms";
+	name_exec[5]="LinearSVMEvaluation";
+
+	for (int i = 0; i < sizeof(time_ms) / sizeof(float); i++)
+		printf("time used: %7.2f ms, executed %3d times\t%d=%s\n", time_ms[i], time_exec[i], i, name_exec[i]);
 }
 
 /*

@@ -7,11 +7,12 @@
 #include "HOGPadding.h"
 
 #define start_proc cudaEventRecord(start, 0);\
-for(int times = 0; times < 8000; ++times) {
+for(int times = 0; times < 64; ++times) {
 #define end_proc(a) }\
 cudaEventRecord(stop, 0);\
 cudaEventSynchronize(stop);\
-cudaEventElapsedTime(&elapsed_time_ms[a], start, stop);
+cudaEventElapsedTime(&elapsed_time_ms[a], start, stop);\
+++exec_time[a];
 
 cudaEvent_t start, stop;
 
@@ -167,7 +168,7 @@ __host__ void CloseHOG()
 	cudaThreadExit();
 }
 
-__host__ void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale, float *elapsed_time_ms)
+__host__ void BeginHOGProcessing(unsigned char* hostImage, int minx, int miny, int maxx, int maxy, float minScale, float maxScale, float *elapsed_time_ms, int *exec_time)
 {
 	int i;
 
